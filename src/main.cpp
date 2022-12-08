@@ -22,12 +22,9 @@ void setup() {
   LiquidCrystal_I2C lcd(0x27, 20, 4); 
   Schrittmot Step1(SPR,SPEED);
   Serv Servo1(5,START1);
-  lcd.init();
-  lcd.backlight(); 
-//  Serial.begin(9600);status
-//  Serial.println("Start");
-//  Serial.println("Start");
-//  Serial.println("Start");
+  //lcd.init();
+  //lcd.backlight(); 
+
   
   aktorenini();  
   pinMode(LEFT_DIRPIN, OUTPUT);
@@ -113,7 +110,7 @@ status_lcd=status;
     }
 
     
-    lcd_ausgabe(lcd,status_lcd,dur); //für display. zu debugging-zwecken. Auskommentieren, wenn nicht benötigt
+    //lcd_ausgabe(lcd,status_lcd,dur); //für display. zu debugging-zwecken. Auskommentieren, wenn nicht benötigt
     
     //Servo2.turner();
  if(!Step1.schritter()){ //wenn der Schrittmotor die richtige position hat
