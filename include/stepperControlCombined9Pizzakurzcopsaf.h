@@ -96,7 +96,7 @@
 
 // Makros als FunktsGH
 void setLeftPulsePinHigh() {
-  LEFT_PULSEPIN_LOW;    
+  LEFT_PULSEPIN_HIGH;    
 }
 void setLeftPulsePinLow() {
   LEFT_PULSEPIN_LOW;    

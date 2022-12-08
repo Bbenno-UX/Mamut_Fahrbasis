@@ -65,7 +65,7 @@ void setup() {
 
   program = (!digitalRead(PROGRAM_PIN_1) << 1) | !digitalRead(PROGRAM_PIN_0);
 
-// Motor Driver Left
+// den ganzen kram hab ich einfach mit reinkopiert
   initMotorDriverHardware(p_leftMd, LEFT_DIRPIN, LEFT_PULSEPIN, LEFT_ENABLEPIN, LEFT_FALSE_DIRECTION, UNIT, LEFT_CIRCUMFERENCE, LEFT_TICKSPERROTATION);
   initMotorDriverSoftware(p_leftMd, getChannel(), LEFT_MIN_ANGULARVELOCITY, LEFT_MIN_ANGULARACCELERATION, LEFT_MAX_ANGULARVELOCITY, LEFT_MAX_ANGULARACCELERATION, LEFT_VELOCITY_CONTROLINTERVALL, LEFT_DUTY_CYCLE);
   p_leftMd->whichTemp = 0; // Identifizierung
@@ -85,7 +85,7 @@ void setup() {
 
   timerSetup(); // Timer jetzt schon aktiv -> Unschön: Lieber erst aktivieren, sobald der erste Channel aktiv
 unsigned long serles=0;
-char buffers[2][6];
+char buffers[2][6]; //array zum einlesen von Serieller ausgabe
   for(int i=0;i<2;i++){
   memset(buffers[i],0,6);
   }
@@ -105,14 +105,15 @@ bool setd;
 while(1){
 
     if(ser_prozed(serles,availprev,buffers,j,k,status,dur)){ //tritt auf, wenn eine Serielle Nachricht voll gelesen wurde
+    //wichtig: Befehl= Numer,Dauer, also 5,100 für 100 schritte mit dem Schrittmotor
       setd=false;
       start=true;
-setState(Step1,Servo1,status,dur); 
+setState(Step1,Servo1,status,dur); //für die befehle bzgl. Schritte und Servos
 status_lcd=status;
     }
 
     
-    lcd_ausgabe(lcd,status_lcd,dur);
+    lcd_ausgabe(lcd,status_lcd,dur); //für display. zu debugging-zwecken. Auskommentieren, wenn nicht benötigt
     
     //Servo2.turner();
  if(!Step1.schritter()){ //wenn der Schrittmotor die richtige position hat
@@ -148,45 +149,15 @@ status_lcd=status;
 //    Serial.end();
     previousMillis = currentMillis;
     // Verarbeitung von sensorFeedback();
-    /*switch (sensorFeedback()) {
-      case 0:
-      if ((p_leftMd->earlyStopFinished) && (p_rightMd->earlyStopFinished)) {
-        p_leftMd->earlyStopFlag = false;
-        p_rightMd->earlyStopFlag = false;
-        p_leftMd->earlyStopFinished = false;
-        p_rightMd->earlyStopFinished = false;
-        //spl("RETURN_RETURN_RETURN_RETURN_RETURN");
-        returnDriving(p_leftMd, p_rightMd);
-      }
-      break;
-      case 1:
-      if ((p_leftMd->ch->active) || (p_rightMd->ch->active)) {
-        if ((p_leftMd->dirForward) && (p_rightMd->dirForward)) {
-          earlyStopNow(p_leftMd, p_rightMd);
-        }
-      }
-      break;
-      case 2:
-        if ((p_leftMd->ch->active) || (p_rightMd->ch->active)) {
-          earlyStopNow(p_leftMd, p_rightMd);
-        }
-      break;
-      case 3:
-      if ((p_leftMd->ch->active) || (p_rightMd->ch->active)) {
-        if (!(p_leftMd->dirForward) && !(p_rightMd->dirForward)) {
-          earlyStopNow(p_leftMd, p_rightMd);
-        }
-      }
-      break;
-    }  */
 
+serielle_statemachine(status,dur,start); //für die Fahrbasisbefehle
   }
   
-  serielle_statemachine(status,dur,start); 
+  
   if(go){
     go=false;
     status=0;
-    Serial.println("1");
+    Serial.println("1"); // das hier ist der "fertig" befhel für den rpi
   }
 }
 }
